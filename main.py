@@ -1,7 +1,15 @@
 from flask import Flask, jsonify, request
+import os
+import w3storage
+
+w3s = os.environ['w3s']
+w3 = w3storage.API(token=w3s)
+
+some_uploads = w3.user_uploads(size=25)
+
+print(some_uploads)
 
 app = Flask('app')
-
 
 @app.route('/')
 def hello_world():
