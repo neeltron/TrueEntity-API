@@ -9,6 +9,8 @@ some_uploads = w3.user_uploads(size=25)
 
 print(some_uploads)
 
+hello_cid = w3.post_upload(('sample.txt', 'hey there'))
+
 app = Flask('app')
 
 @app.route('/')
