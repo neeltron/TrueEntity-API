@@ -12,6 +12,7 @@ flask = "^2.3.3"
 w3storage = "0.0.1"
 replit = "^3.3.2"
 qrcode = "^7.4.2"
+cryptography = "41.0.4"
 
 
 [build-system]

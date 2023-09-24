@@ -3,10 +3,16 @@ import requests
 from replit import db
 import os
 import w3storage
+import json
 import qrcode
+from cryptography.fernet import Fernet
 
 w3s = os.environ['w3s']
 w3 = w3storage.API(token=w3s)
+
+secret_key = Fernet.generate_key()
+print(secret_key)
+cipher_suite = Fernet(secret_key)
 
 app = Flask('app', static_folder = 'static')
 
@@ -23,7 +29,10 @@ def handle_post_request():
   passport = data.get('passport')
   dob = data.get('dob')
   userdata = name + ', ' + ssn + ', ' + passport + ', ' + dob
-  hello_cid = w3.post_upload(('sample.txt', userdata))
+  data_json = json.dumps(userdata)
+  encrypted_data = cipher_suite.encrypt(data_json.encode())
+  print(encrypted_data)
+  hello_cid = w3.post_upload(('sample.txt', encrypted_data))
   print(hello_cid)
   db[name] = hello_cid
   
@@ -37,7 +46,9 @@ def data():
   name = request.args.get('name')
   url = "https://" + db[name] + ".ipfs.w3s.link"
   response = requests.get(url)
-  print(response)
-  return jsonify(data=response.text), 200
+  decrypted_data = cipher_suite.decrypt(response.text)
+  data = json.loads(decrypted_data.decode())
+  print(response, data)
+  return jsonify(data=data), 200
 
 app.run(host='0.0.0.0', port=8080)
