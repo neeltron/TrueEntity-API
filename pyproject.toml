@@ -10,6 +10,8 @@ packages = [{include = "repl_nix_trueentity_api"}]
 python = "^3.10"
 flask = "^2.3.3"
 w3storage = "0.0.1"
+replit = "^3.3.2"
+qrcode = "^7.4.2"
 
 
 [build-system]
